@@ -1,4 +1,0 @@
-<button onclick="load()">Load</button><pre id=out></pre>
-<script>
-function load(){fetch('/notes').then(r=>r.json()).then(d=>out.textContent=JSON.stringify(d,null,2));}
-</script>
