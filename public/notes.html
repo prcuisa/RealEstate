@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notes Tester</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    input, textarea {
+      width: 100%;
+      margin: 5px 0;
+      padding: 8px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 15px;
+      margin: 5px 0;
+      cursor: pointer;
+    }
+    .note-box {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Notes API Tester</h1>
+
+  <label>Your Codespace / Local API URL:</label>
+  <input id="baseUrl" placeholder="https://xxxx-3000.app.github.dev" />
+
+  <h2>Create Note</h2>
+  <input id="title" placeholder="Title" />
+  <textarea id="content" placeholder="Content"></textarea>
+  <button onclick="createNote()">Create</button>
+
+  <h2>Get All Notes</h2>
+  <button onclick="getNotes()">Load Notes</button>
+  <div id="notes"></div>
+
+  <script>
+    async function createNote() {
+      const base = document.getElementById("baseUrl").value;
+      const title = document.getElementById("title").value;
+      const content = document.getElementById("content").value;
+
+      const res = await fetch(base + "/notes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, content })
+      });
+
+      alert("Created: " + res.status);
+    }
+
+    async function getNotes() {
+      const base = document.getElementById("baseUrl").value;
+      const res = await fetch(base + "/notes");
+      const data = await res.json();
+
+      const box = document.getElementById("notes");
+      box.innerHTML = "";
+
+      data.forEach(note => {
+        box.innerHTML += `
+          <div class='note-box'>
+            <b>ID:</b> ${note.id}<br>
+            <b>Title:</b> ${note.title}<br>
+            <b>Content:</b> ${note.content}<br>
+          </div>
+        `;
+      });
+    }
+  </script>
+</body>
+</html>
